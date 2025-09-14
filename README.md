@@ -1,12 +1,12 @@
-## NAPTELLIGENCE 🚀😴
+# NAPTELLIGENCE 🚀😴
 
-# Project Description
+## Project Description
 
 NapTelligence is a simple AI-powered app that acts as your personal sleep coach. It connects to your wearable device (like a Fitbit) to track your sleep patterns, creates easy-to-follow daily tips to improve your rest, and sends gentle reminders to build better sleep habits. Built as an autonomous agent, it runs in the background to make better sleep feel effortless.
 
   <img src="https://via.placeholder.com/800x400/4A90E2/FFFFFF?text=NapTelligence:+Your+AI+Sleep+Coach" alt="NapTelligence Demo">
 
-#What It Aims to Solve
+## What It Aims to Solve
 
 Many people struggle with sleep issues like jet lag or insomnia, which zap their energy and hurt daily productivity. NapTelligence tackles this by turning raw sleep data into actionable, personalized nudges without overwhelming the user.
 Goals
@@ -17,7 +17,7 @@ Goals
 
 🔔 Send one quick reminder per day via push notification to encourage small habit changes.
 
-#Tech Stack
+## Tech Stack
 
 AI Agents: Built with Maestro from Danta Labs for autonomous orchestration.
 
@@ -27,7 +27,7 @@ Backend: Python with LLMs (e.g., OpenAI/Grok) for personalized insights.
 
 Notifications: Push via Firebase or Twilio.
 
-#Getting Started(proximamente)
+## Getting Started(proximamente)
 
 Clone the repo: git clone https://github.com/yourusername/naptelligence.git
 
@@ -39,7 +39,7 @@ Run the agent: python main.py
 
 For more details, check out the documentation.
 
-#License
+## License
 
 Copyright 2025 Nathalia Chivatá, Daniel Bernal
 
