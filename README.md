@@ -5,7 +5,7 @@
 NapTelligence is a simple AI-powered app that acts as your personal sleep coach. It connects to your wearable device (like a Fitbit) to track your sleep patterns, creates easy-to-follow daily tips to improve your rest, and sends gentle reminders to build better sleep habits. Built as an autonomous agent, it runs in the background to make better sleep feel effortless.
 
   ![Imagen1.](/assets/License-Apache-2.0-blue.svg)
-  ![Imagen2.](/assets/images/Python-3.8+-blue.svg)
+  ![Imagen2.](/assets/Python-3.8+-blue.svg)
 
 ## What It Aims to Solve
 
