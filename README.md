@@ -24,9 +24,9 @@ AI Agents: Built with Maestro from Danta Labs for autonomous orchestration.
 
 Wearables Integration: Fitbit API for seamless data syncing.
 
-Backend: Python with LLMs (e.g., OpenAI/Grok) for personalized insights.
+Backend: (prox)
 
-Notifications: Push via Firebase or Twilio.
+Notifications: (prox)
 
 ## Getting Started(proximamente)
 
