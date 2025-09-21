@@ -1,0 +1,21 @@
+# Maestro Agent Bundle Configuration
+entrypoint: main.py
+description: Un agente de IA que analiza patrones de sueño para generar recomendaciones personalizadas y notificaciones.
+version: 0.1.0
+dockerfile: Dockerfile
+name: demos
+
+# Dependencies needed by this agent
+requirements:
+  - maestro-sdk  # <-- AÑADE ESTA LÍNEA
+  - fastapi>=0.104.0
+  - uvicorn[standard]>=0.24.0
+
+# Additional metadata
+metadata:
+  author: Tu Nombre
+  tags:
+    - sleep
+    - health
+    - ai
+    - docker

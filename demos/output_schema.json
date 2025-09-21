@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "analysis_summary": {
+      "type": "string"
+    },
+    "personalized_tips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "daily_notification": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "body"]
+    }
+  },
+  "required": ["analysis_summary", "personalized_tips", "daily_notification"]
+}

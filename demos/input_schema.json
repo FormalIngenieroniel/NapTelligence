@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "sleep_summary": {
+      "type": "object",
+      "properties": {
+        "start_time": {"type": "string", "format": "date-time"},
+        "end_time": {"type": "string", "format": "date-time"},
+        "total_duration_minutes": {"type": "integer"},
+        "average_hr": {"type": "integer"},
+        "average_hrv": {"type": "integer"},
+        "interruptions_count": {"type": "integer"}
+      },
+      "required": ["total_duration_minutes", "interruptions_count"]
+    },
+    "raw_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {"type": "string", "format": "date-time"},
+          "average_hr": {"type": "integer"},
+          "average_hrv": {"type": "integer"},
+          "status": {"type": "string"}
+        }
+      }
+    }
+  },
+  "required": ["date", "sleep_summary", "raw_data"]
+}
