@@ -1,21 +1,19 @@
-# Maestro Agent Bundle Configuration
 entrypoint: main.py
-description: Un agente de IA que analiza patrones de sueño para generar recomendaciones personalizadas y notificaciones.
-version: 0.1.0
+description: A sleep analysis agent that provides personalized tips based on sleep data.
+version: 1.0.0
 dockerfile: Dockerfile
-name: demos
+name: naptelligence-agent
 
-# Dependencies needed by this agent
+# Dependencies needed by this agent 
 requirements:
-  - maestro-sdk  # <-- AÑADE ESTA LÍNEA
-  - fastapi>=0.104.0
-  - uvicorn[standard]>=0.24.0
+	- fastapi>=0.111.0
+	- uvicorn[standard]>=0.30.1
 
 # Additional metadata
 metadata:
-  author: Tu Nombre
-  tags:
-    - sleep
-    - health
-    - ai
-    - docker
+	author: NapTelligence Team
+	tags:
+		- sleep
+		- analysis
+		- fastapi
+		- agent

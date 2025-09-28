@@ -1,67 +1,89 @@
-import maestro
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List, Dict
 
-# Definimos la clase de entrada que corresponde con el input_schema.json
-# Esto permite a Maestro validar y estructurar los datos de entrada.
-class SleepInput(maestro.Input):
-    date: str
-    sleep_summary: dict
-    raw_data: list
+# --- Definición de los modelos de datos (Input/Output) ---
 
-# Definimos la interfaz del agente. En este caso, será una interfaz web.
-class SleepAgentInterface(maestro.Interface):
-    type: str = "web"
-    input: maestro.Input = SleepInput
+class SleepSummary(BaseModel):
+    total_duration_minutes: int
+    interruptions_count: int
 
-# Creamos la clase principal del agente "NapTelligence"
-class NapTelligenceAgent(maestro.Agent):
-    interfaces: list[maestro.Interface] = [SleepAgentInterface]
+class SleepInput(BaseModel):
+    sleep_summary: SleepSummary
+
+class Notification(BaseModel):
+    title: str
+    body: str
+
+class SleepOutput(BaseModel):
+    analysis_summary: str
+    personalized_tips: List[str]
+    daily_notification: Notification
+
+# --- Inicialización de la aplicación FastAPI ---
+
+app = FastAPI(
+    title="NapTelligence Sleep Agent",
+    description="An agent that analyzes sleep data to provide insights and tips.",
+    version="1.0.0"
+)
+
+# --- Lógica del Agente ---
+
+def analyze_sleep_data(data: SleepInput) -> SleepOutput:
+    """
+    Procesa los datos de sueño y genera un análisis, consejos y una notificación.
+    """
+    summary = data.sleep_summary
+    duration = summary.total_duration_minutes
+    interruptions = summary.interruptions_count
+
+    analysis_summary = f"Análisis de sueño: Duración total de {duration} minutos con {interruptions} interrupciones."
+    personalized_tips = []
     
-    def execute(self):
-        # Cargamos los datos de entrada usando el SDK de Maestro.
-        summary = maestro.load_input("sleep_summary")
+    # Lógica de análisis y consejos
+    if duration < 420: # Menos de 7 horas
+        analysis_summary += " La duración del sueño fue corta."
+        personalized_tips.append("Intenta acostarte 30 minutos antes para aumentar tu tiempo de sueño.")
+    else:
+        analysis_summary += " La duración del sueño fue adecuada."
+        personalized_tips.append("¡Buen trabajo! Mantén una duración de sueño consistente.")
+
+    if interruptions > 1:
+        analysis_summary += " Se detectaron varias interrupciones."
+        personalized_tips.append("Asegúrate de que tu habitación esté oscura, silenciosa y fresca para minimizar las interrupciones.")
+    else:
+        analysis_summary += " El sueño fue continuo."
+        personalized_tips.append("Tu entorno de sueño parece ser efectivo para un descanso sin interrupciones.")
+
+    # Creación de la notificación diaria
+    notification = Notification(
+        title="Tu Resumen de Sueño 😴",
+        body=f"Dormiste {duration // 60}h {duration % 60}m con {interruptions} interrupciones. ¡Revisa tus consejos personalizados!"
+    )
+    
+    return SleepOutput(
+        analysis_summary=analysis_summary,
+        personalized_tips=personalized_tips,
+        daily_notification=notification
+    )
+
+# --- Endpoints de la API ---
+
+@app.get("/", tags=["General"])
+async def read_root() -> Dict[str, str]:
+    return {"message": "Welcome to the NapTelligence API"}
+
+@app.post("/analyze_sleep", response_model=SleepOutput, tags=["Sleep Analysis"])
+async def analyze_sleep(sleep_data: SleepInput) -> SleepOutput:
+    """
+    Recibe los datos del sueño, los analiza y devuelve un resumen y consejos.
+    """
+    if sleep_data.sleep_summary.total_duration_minutes <= 0:
+        raise HTTPException(status_code=400, detail="La duración del sueño debe ser mayor a cero.")
         
-        # --- Lógica de Análisis del Sueño ---
-        # Aquí definimos las reglas para determinar la calidad del sueño.
-        
-        analysis_summary = ""
-        personalized_tips = []
-        notification_body = ""
+    return analyze_sleep_data(sleep_data)
 
-        is_short_sleep = summary["total_duration_minutes"] < 420  # Menos de 7 horas
-        is_restless_sleep = summary["interruptions_count"] > 3
-        
-        # Generar resumen y consejos basados en las reglas
-        if is_short_sleep:
-            analysis_summary = f"Anoche dormiste {summary['total_duration_minutes'] // 60} horas y {summary['total_duration_minutes'] % 60} minutos, un poco menos de lo recomendado."
-            notification_body = "Tu sueño fue un poco corto anoche. ¡Intenta descansar un poco más esta noche! 😴"
-            personalized_tips.append("Intenta acostarte 30 minutos antes para alcanzar las 7-8 horas de sueño recomendadas.")
-        else:
-            analysis_summary = f"¡Excelente! Anoche dormiste un total de {summary['total_duration_minutes'] // 60} horas y {summary['total_duration_minutes'] % 60} minutos."
-            notification_body = "¡Tuviste una gran noche de descanso! Sigue así. ✨"
-            
-        if is_restless_sleep:
-            analysis_summary += f" Notamos que tuviste {summary['interruptions_count']} interrupciones."
-            personalized_tips.append("Para un sueño más profundo, considera crear un ambiente más oscuro y silencioso en tu habitación.")
-            
-        # Añadir un consejo general siempre
-        personalized_tips.append("Mantén un horario de sueño y vigilia constante, incluso los fines de semana, para regular tu reloj biológico.")
-
-        # Si no se activó ninguna regla negativa, damos un mensaje positivo
-        if not is_short_sleep and not is_restless_sleep:
-            personalized_tips.append("Tu patrón de sueño es muy saludable. ¡Continúa con esos buenos hábitos!")
-
-        # --- Estructurar la Salida ---
-        # Creamos el diccionario de salida que coincide con el output_schema.json
-        return {
-            "analysis_summary": analysis_summary,
-            "personalized_tips": personalized_tips,
-            "daily_notification": {
-                "title": "Tu Resumen de Sueño 💤",
-                "body": notification_body
-            }
-        }
-
-# <-- CAMBIO CLAVE AQUÍ
-# Desplegamos el agente y asignamos la aplicación FastAPI resultante a la variable 'app'.
-# Uvicorn buscará esta variable 'app' para iniciar el servidor.
-app = maestro.deploy(NapTelligenceAgent)
+@app.get("/health", tags=["General"])
+async def health_check() -> Dict[str, str]:
+    return {"status": "ok"}
