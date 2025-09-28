@@ -22,21 +22,67 @@ Goals
 
 ## Tech Stack
 
-AI Agents: Built with Maestro from Danta Labs for autonomous orchestration.
+### Backend
+Python 3.11: The core programming language for the agent's logic.
+FastAPI: A modern, high-performance web framework used to build the API for the agent.
+Pydantic: Used within FastAPI for data validation and ensuring the input and output data match the required schemas.
+Uvicorn: An ASGI server that runs the FastAPI application, making it accessible via HTTP.
 
-Wearables Integration: Fitbit API for seamless data syncing.
+### Artificial Intelligence
+Google Generative AI (Gemini): The AI model (gemini-1.5-flash) that powers the agent's core logic, responsible for analyzing sleep data and generating insights.
 
-Backend: (prox)
+### Frontend (for the Demo UI)
+HTML5: The standard markup language for creating the web page structure.
+CSS3: Used for styling the web interface, including the mobile phone mockups and overall layout.
+JavaScript: Powers the interactivity of the demo page, handling file uploads, API requests to the agent, and displaying the results dynamically.
 
-Notifications: (prox)
+### Deployment
+Docker: Used to containerize the application, ensuring it runs consistently across different environments.
+Maestro: The configuration files suggest the agent is designed to be managed and deployed using the Maestro platform for autonomous agents
 
 ## Setup Instructions
 
-Como instalar y correr el agente
+### Step 1: Download the Code
+First, clone the project repository to your local machine using Git, or simply download and unzip the project files.
 
-## Usage Guide
+Bash
+git clone https://github.com/your-username/naptelligence-agent.git
+cd naptelligence-agent
 
-Como el usuario o el desarrollador interactua con el
+### Step 2: Get Your Google AI (Gemini) API Key
+To use the agent, you need a Gemini API key.
+Go to the Google AI Studio website.
+Sign in with your Google account.
+Click on "Get API key" in the top left menu.
+Click "Create API key in new project".
+Copy the generated API key. Keep it safe, as you'll need it in the next step.
+
+### Step 3: Create the Environment Secrets File
+The agent uses a .env file to manage your secret API key locally.
+In the root directory of the project, create a new file named .env.
+Open the file and add the following line, replacing "YOUR_GEMINI_API_KEY_HERE" with the key you copied in the previous step.
+GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+
+### Step 4: Install Dependencies
+The project uses a requirements.txt file to manage its Python libraries. Install them using pip.
+Bash
+pip install -r requirements.txt
+
+### Step 5: Run the Agent Locally
+You can now start the agent on your local machine using the Uvicorn server, which is specified in the Dockerfile.
+Bash
+uvicorn main:app --host 0.0.0.0 --port 8080
+Your agent is now running! You can open a web browser and navigate to http://localhost:8080/docs to see the automatically generated API documentation and test the endpoints.
+
+### Step 6: Add the API Key to Agent Secrets for Deployment
+When you are ready to deploy your agent (for example, using a platform like Maestro), you must add your Gemini API key as a secret.
+Navigate to your agent's settings on your deployment platform.
+Find the "Secrets" or "Environment Variables" section.
+Create a new secret with the exact name 
+GOOGLE_API_KEY.
+Paste your Gemini API key into the value field.
+Save and redeploy your agent.
+This ensures your agent can securely access the Google AI services without exposing your key in the source code.
 
 ## Example API Calls
 
