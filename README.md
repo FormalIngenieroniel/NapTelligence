@@ -57,10 +57,9 @@ Click on "Get API key" in the top left menu.
 Click "Create API key in new project".
 Copy the generated API key. Keep it safe, as you'll need it in the next step.
 
-### Step 3: Create the Environment Secrets File
-The agent uses a .env file to manage your secret API key locally.
-In the root directory of the project, create a new file named .env.
-Open the file and add the following line, replacing "YOUR_GEMINI_API_KEY_HERE" with the key you copied in the previous step.
+### Step 3: Create the Secret Variable
+The agent uses a Secret variable to manage your secret API key locally.
+Update your agent by adding the variable with your API key in the manage agents area of the Maestro website.
 GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
 
 ### Step 4: Install Dependencies
