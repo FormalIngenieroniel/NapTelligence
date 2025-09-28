@@ -87,6 +87,7 @@ This ensures your agent can securely access the Google AI services without expos
 These are example requests and corresponding responses that show how to interact with the API.
 
 **Endpoint:** `POST /analyze_sleep`
+
 **URL base:** `TU_URL_DE_SERVICIO/analyze_sleep`
 ---
 
