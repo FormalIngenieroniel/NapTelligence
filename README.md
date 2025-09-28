@@ -88,7 +88,7 @@ These are example requests and corresponding responses that show how to interact
 
 **Endpoint:** `POST /analyze_sleep`
 
-**URL base:**  `TU_URL_DE_SERVICIO/analyze_sleep`
+**URL base:**  `YOUR_URL_SERVICE/analyze_sleep`
 
 ---
 
