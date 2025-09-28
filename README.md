@@ -121,8 +121,9 @@ This example demonstrates a request with an optimal sleep duration and few inter
     }
   ]
 }
+```json
 
-**Output
+**Output**
 ```json
 {
     "analysis_summary": "Great job on getting almost 8.25 hours of sleep last night! Your average heart rate during sleep was a healthy 60 bpm, and your HRV was a solid 70. You only experienced one interruption, which is fantastic.  Your body appears to be recovering well. Keep up the good work!",
@@ -137,7 +138,7 @@ This example demonstrates a request with an optimal sleep duration and few inter
         "body": "You achieved almost 8.25 hours of sleep last night with a low interruption count. Review your personalized sleep tips for continuous improvement!"
     }
 }
-
+```json
 ### Case 2: Insufficient Sleep
 This example demonstrates a request with a short sleep duration and potential signs of stress or poor sleep quality.
 ```json
