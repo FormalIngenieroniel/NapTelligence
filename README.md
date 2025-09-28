@@ -83,18 +83,19 @@ Paste your Gemini API key into the value field.
 Save and redeploy your agent.
 This ensures your agent can securely access the Google AI services without exposing your key in the source code.
 
-## Example API Calls
+# 📌 Example API Calls
 These are example requests and corresponding responses that show how to interact with the API.
 
 **Endpoint:** `POST /analyze_sleep`
-**URL:** `TU_URL_DE_SERVICIO/analyze_sleep`
-**Header:** `Content-Type: application/json`
+**URL base:** `TU_URL_DE_SERVICIO/analyze_sleep`
+---
 
+## ✅ Case 1: Ideal Sleep
 
-### Case 1: Ideal Sleep
 This example demonstrates a request with an optimal sleep duration and few interruptions.
 
-**Request:**
+**Request**
+
 ```json
 {
   "date": "2025-09-28",
@@ -121,25 +122,34 @@ This example demonstrates a request with an optimal sleep duration and few inter
     }
   ]
 }
+```
 
 **Response**
+
+```json
 {
-    "analysis_summary": "Great job on getting almost 8.25 hours of sleep last night! Your average heart rate during sleep was a healthy 60 bpm, and your HRV was a solid 70. You only experienced one interruption, which is fantastic.  Your body appears to be recovering well. Keep up the good work!",
-    "personalized_tips": [
-        "Maintain a consistent sleep schedule, even on weekends, to further regulate your body's natural sleep-wake cycle.",
-        "Consider a relaxing pre-sleep routine, such as reading or taking a warm bath, to signal to your body that it's time to wind down.",
-        "Ensure your bedroom is dark, quiet, and cool to optimize your sleep environment.",
-        "Given your good HRV, continue engaging in activities that promote relaxation and stress reduction, such as yoga or meditation."
-    ],
-    "daily_notification": {
-        "title": "Sleep Update: Excellent Rest!",
-        "body": "You achieved almost 8.25 hours of sleep last night with a low interruption count. Review your personalized sleep tips for continuous improvement!"
-    }
+  "analysis_summary": "Great job on getting almost 8.25 hours of sleep last night! Your average heart rate during sleep was a healthy 60 bpm, and your HRV was a solid 70. You only experienced one interruption, which is fantastic. Your body appears to be recovering well. Keep up the good work!",
+  "personalized_tips": [
+    "Maintain a consistent sleep schedule, even on weekends, to further regulate your body's natural sleep-wake cycle.",
+    "Consider a relaxing pre-sleep routine, such as reading or taking a warm bath, to signal to your body that it's time to wind down.",
+    "Ensure your bedroom is dark, quiet, and cool to optimize your sleep environment.",
+    "Given your good HRV, continue engaging in activities that promote relaxation and stress reduction, such as yoga or meditation."
+  ],
+  "daily_notification": {
+    "title": "Sleep Update: Excellent Rest!",
+    "body": "You achieved almost 8.25 hours of sleep last night with a low interruption count. Review your personalized sleep tips for continuous improvement!"
+  }
 }
+```
 
+---
 
-### Case 2: Insufficient Sleep
+## ⚠️ Case 2: Insufficient Sleep
+
 This example demonstrates a request with a short sleep duration and potential signs of stress or poor sleep quality.
+
+**Request**
+
 ```json
 {
   "date": "2025-09-29",
@@ -166,25 +176,29 @@ This example demonstrates a request with a short sleep duration and potential si
     }
   ]
 }
+```
 
 **Response**
 
+```json
 {
-    "analysis_summary": "Your sleep on September 29, 2025, totaled 4 hours. While this is shorter than the recommended 7-9 hours for adults, your average heart rate (75 bpm) and HRV (40 ms) provide some insights. The two interruptions suggest potential areas for improvement in your sleep environment or pre-sleep routine.",
-    "personalized_tips": [
-        "Aim for a consistent sleep schedule by going to bed and waking up around the same time each day, even on weekends.",
-        "Create a relaxing bedtime routine, such as reading, taking a warm bath, or listening to calming music, to wind down before sleep.",
-        "Optimize your sleep environment by ensuring your bedroom is dark, quiet, and cool.",
-        "Since you experienced two interruptions, evaluate potential causes like noise, light, or discomfort. Consider using earplugs, a sleep mask, or adjusting your thermostat.",
-        "Focus on improving your HRV, as a higher HRV generally indicates better overall health and resilience. Practices like mindfulness, meditation, and regular exercise can help. Talk with your doctor before starting new exercises.",
-        "Avoid caffeine and alcohol before bed, as they can disrupt your sleep cycle and affect your heart rate and HRV.",
-        "Consider using a sleep tracking app or device to monitor your sleep patterns and identify potential triggers for interruptions or poor sleep quality."
-    ],
-    "daily_notification": {
-        "title": "Sleep Insights - September 29, 2025",
-        "body": "Your sleep duration was 4 hours with 2 interruptions. Your average HR was 75 bpm and HRV was 40 ms. Review your personalized tips for ways to improve!"
-    }
+  "analysis_summary": "Your sleep on September 29, 2025, totaled 4 hours. While this is shorter than the recommended 7-9 hours for adults, your average heart rate (75 bpm) and HRV (40 ms) provide some insights. The two interruptions suggest potential areas for improvement in your sleep environment or pre-sleep routine.",
+  "personalized_tips": [
+    "Aim for a consistent sleep schedule by going to bed and waking up around the same time each day, even on weekends.",
+    "Create a relaxing bedtime routine, such as reading, taking a warm bath, or listening to calming music, to wind down before sleep.",
+    "Optimize your sleep environment by ensuring your bedroom is dark, quiet, and cool.",
+    "Since you experienced two interruptions, evaluate potential causes like noise, light, or discomfort. Consider using earplugs, a sleep mask, or adjusting your thermostat.",
+    "Focus on improving your HRV, as a higher HRV generally indicates better overall health and resilience. Practices like mindfulness, meditation, and regular exercise can help. Talk with your doctor before starting new exercises.",
+    "Avoid caffeine and alcohol before bed, as they can disrupt your sleep cycle and affect your heart rate and HRV.",
+    "Consider using a sleep tracking app or device to monitor your sleep patterns and identify potential triggers for interruptions or poor sleep quality."
+  ],
+  "daily_notification": {
+    "title": "Sleep Insights - September 29, 2025",
+    "body": "Your sleep duration was 4 hours with 2 interruptions. Your average HR was 75 bpm and HRV was 40 ms. Review your personalized tips for ways to improve!"
+  }
 }
+```
+
 ## License
 
 Copyright 2025 Nathalia Chivatá, Daniel Bernal
