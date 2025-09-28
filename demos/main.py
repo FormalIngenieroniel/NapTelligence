@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
+# 1. IMPORT THE CORS MIDDLEWARE
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
 
-# --- Definición de los modelos de datos (Input/Output) ---
+# --- Data Model Definition (Input/Output) ---
 
 class SleepSummary(BaseModel):
     total_duration_minutes: int
@@ -20,7 +22,7 @@ class SleepOutput(BaseModel):
     personalized_tips: List[str]
     daily_notification: Notification
 
-# --- Inicialización de la aplicación FastAPI ---
+# --- FastAPI Application Initialization ---
 
 app = FastAPI(
     title="NapTelligence Sleep Agent",
@@ -28,38 +30,49 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# --- Lógica del Agente ---
+# 2. DEFINE THE ALLOWED ORIGINS (WE USE "*" TO ALLOW ALL)
+origins = ["*"]
+
+# 3. ADD THE MIDDLEWARE TO YOUR APPLICATION
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# --- Agent Logic ---
 
 def analyze_sleep_data(data: SleepInput) -> SleepOutput:
     """
-    Procesa los datos de sueño y genera un análisis, consejos y una notificación.
+    Processes sleep data and generates an analysis, tips, and a notification.
     """
     summary = data.sleep_summary
     duration = summary.total_duration_minutes
     interruptions = summary.interruptions_count
 
-    analysis_summary = f"Análisis de sueño: Duración total de {duration} minutos con {interruptions} interrupciones."
+    analysis_summary = f"Sleep Analysis: Total duration of {duration} minutes with {interruptions} interruptions."
     personalized_tips = []
     
-    # Lógica de análisis y consejos
-    if duration < 420: # Menos de 7 horas
-        analysis_summary += " La duración del sueño fue corta."
-        personalized_tips.append("Intenta acostarte 30 minutos antes para aumentar tu tiempo de sueño.")
+    if duration < 420:
+        analysis_summary += " Sleep duration was short."
+        personalized_tips.append("Try to go to bed 30 minutes earlier to increase your sleep time.")
     else:
-        analysis_summary += " La duración del sueño fue adecuada."
-        personalized_tips.append("¡Buen trabajo! Mantén una duración de sueño consistente.")
+        analysis_summary += " Sleep duration was adequate."
+        personalized_tips.append("Good job! Maintain a consistent sleep duration.")
 
     if interruptions > 1:
-        analysis_summary += " Se detectaron varias interrupciones."
-        personalized_tips.append("Asegúrate de que tu habitación esté oscura, silenciosa y fresca para minimizar las interrupciones.")
+        analysis_summary += " Several interruptions were detected."
+        personalized_tips.append("Make sure your room is dark, quiet, and cool to minimize interruptions.")
     else:
-        analysis_summary += " El sueño fue continuo."
-        personalized_tips.append("Tu entorno de sueño parece ser efectivo para un descanso sin interrupciones.")
+        analysis_summary += " Sleep was continuous."
+        personalized_tips.append("Your sleep environment seems to be effective for an uninterrupted rest.")
 
-    # Creación de la notificación diaria
     notification = Notification(
-        title="Tu Resumen de Sueño 😴",
-        body=f"Dormiste {duration // 60}h {duration % 60}m con {interruptions} interrupciones. ¡Revisa tus consejos personalizados!"
+        title="Your Sleep Summary 😴",
+        body=f"You slept for {duration // 60}h {duration % 60}m with {interruptions} interruptions. Check out your personalized tips!"
     )
     
     return SleepOutput(
@@ -68,7 +81,7 @@ def analyze_sleep_data(data: SleepInput) -> SleepOutput:
         daily_notification=notification
     )
 
-# --- Endpoints de la API ---
+# --- API Endpoints ---
 
 @app.get("/", tags=["General"])
 async def read_root() -> Dict[str, str]:
@@ -76,11 +89,8 @@ async def read_root() -> Dict[str, str]:
 
 @app.post("/analyze_sleep", response_model=SleepOutput, tags=["Sleep Analysis"])
 async def analyze_sleep(sleep_data: SleepInput) -> SleepOutput:
-    """
-    Recibe los datos del sueño, los analiza y devuelve un resumen y consejos.
-    """
     if sleep_data.sleep_summary.total_duration_minutes <= 0:
-        raise HTTPException(status_code=400, detail="La duración del sueño debe ser mayor a cero.")
+        raise HTTPException(status_code=400, detail="Sleep duration must be greater than zero.")
         
     return analyze_sleep_data(sleep_data)
 

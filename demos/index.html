@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NapTelligence Sleep Analyzer - Mobile View</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>NapTelligence Sleep Analyzer 🌙</h1>
+        <p>Upload a JSON file with your sleep data to get a personalized analysis and see how it would look on your phone.</p>
+        
+        <div class="upload-area">
+            <input type="file" id="fileInput" accept=".json">
+        </div>
+
+        <button id="analyzeButton">Analyze Sleep</button>
+        <p id="error-message" class="hidden"></p>
+
+        <div id="response-area" class="hidden">
+            <h3>Agent's Response:</h3>
+            <pre id="rawOutput"></pre>
+        </div>
+    </div>
+
+    <div class="phone-display-container">
+        <div class="phone-column">
+            <h3>Sleep Analysis</h3>
+            <img src="../assets/iphone2.png" alt="iPhone Mockup">
+            <div id="phoneScreen1" class="phone-screen-content hidden"></div>
+        </div>
+
+        <div class="phone-column">
+            <h3>Daily Notification</h3>
+            <img src="../assets/iphone2.png" alt="iPhone Mockup">
+            <div id="phoneScreen2" class="phone-screen-content notification-screen hidden"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
