@@ -30,17 +30,17 @@ Backend: (prox)
 
 Notifications: (prox)
 
-## Getting Started(proximamente)
+## Setup Instructions
 
-Clone the repo: git clone https://github.com/yourusername/naptelligence.git
+Como instalar y correr el agente
 
-Install dependencies: pip install -r requirements.txt
+## Usage Guide
 
-Set up your Fitbit API keys in .env.
+Como el usuario o el desarrollador interactua con el
 
-Run the agent: python main.py
+## Example API Calls
 
-For more details, check out the documentation.
+Peticiones y respuestas de ejemplo para que lo demas lo usen facil
 
 ## License
 
