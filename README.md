@@ -121,10 +121,8 @@ This example demonstrates a request with an optimal sleep duration and few inter
     }
   ]
 }
-```json
 
-**Output**
-```json
+**Response**
 {
     "analysis_summary": "Great job on getting almost 8.25 hours of sleep last night! Your average heart rate during sleep was a healthy 60 bpm, and your HRV was a solid 70. You only experienced one interruption, which is fantastic.  Your body appears to be recovering well. Keep up the good work!",
     "personalized_tips": [
@@ -138,7 +136,8 @@ This example demonstrates a request with an optimal sleep duration and few inter
         "body": "You achieved almost 8.25 hours of sleep last night with a low interruption count. Review your personalized sleep tips for continuous improvement!"
     }
 }
-```json
+
+
 ### Case 2: Insufficient Sleep
 This example demonstrates a request with a short sleep duration and potential signs of stress or poor sleep quality.
 ```json
@@ -168,8 +167,8 @@ This example demonstrates a request with a short sleep duration and potential si
   ]
 }
 
-**output
-```json
+**Response**
+
 {
     "analysis_summary": "Your sleep on September 29, 2025, totaled 4 hours. While this is shorter than the recommended 7-9 hours for adults, your average heart rate (75 bpm) and HRV (40 ms) provide some insights. The two interruptions suggest potential areas for improvement in your sleep environment or pre-sleep routine.",
     "personalized_tips": [
