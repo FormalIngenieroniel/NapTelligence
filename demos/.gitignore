@@ -1,1 +1,9 @@
+# Archivo de estado de Maestro
 .maestro_state.json
+
+# Archivo con secretos y variables de entorno
+.env
+
+# Opcional: Otros archivos comunes de Python que se pueden ignorar
+__pycache__/
+*.pyc

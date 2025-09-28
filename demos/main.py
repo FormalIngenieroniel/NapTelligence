@@ -1,15 +1,31 @@
+import os
+import json
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Optional
+import google.generativeai as genai
 
 # --- Definición de los modelos de datos (Input/Output) ---
+# Modelos actualizados para coincidir con input_schema.json
 
 class SleepSummary(BaseModel):
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
     total_duration_minutes: int
+    average_hr: Optional[int] = None
+    average_hrv: Optional[int] = None
     interruptions_count: int
 
+class RawDataItem(BaseModel):
+    timestamp: str
+    average_hr: Optional[int] = None
+    average_hrv: Optional[int] = None
+    status: Optional[str] = None
+
 class SleepInput(BaseModel):
+    date: str
     sleep_summary: SleepSummary
+    raw_data: List[RawDataItem]
 
 class Notification(BaseModel):
     title: str
@@ -28,45 +44,54 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# --- Lógica del Agente ---
+# --- Configuración del cliente de Google AI ---
+# La clave API se lee de la variable de entorno inyectada por Maestro
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-def analyze_sleep_data(data: SleepInput) -> SleepOutput:
+# --- Lógica del Agente con IA ---
+
+def analyze_sleep_data_with_ai(data: SleepInput) -> SleepOutput:
     """
-    Procesa los datos de sueño y genera un análisis, consejos y una notificación.
+    Procesa los datos de sueño usando un modelo de IA para generar análisis.
     """
-    summary = data.sleep_summary
-    duration = summary.total_duration_minutes
-    interruptions = summary.interruptions_count
-
-    analysis_summary = f"Análisis de sueño: Duración total de {duration} minutos con {interruptions} interrupciones."
-    personalized_tips = []
+    # Convertir los datos de entrada a un string JSON para el prompt
+    input_data_str = data.model_dump_json(indent=2)
     
-    # Lógica de análisis y consejos
-    if duration < 420: # Menos de 7 horas
-        analysis_summary += " La duración del sueño fue corta."
-        personalized_tips.append("Intenta acostarte 30 minutos antes para aumentar tu tiempo de sueño.")
-    else:
-        analysis_summary += " La duración del sueño fue adecuada."
-        personalized_tips.append("¡Buen trabajo! Mantén una duración de sueño consistente.")
+    # --- CAMBIO AQUÍ ---
+    # Modelo generativo de Google AI (nombre corregido)
+    model = genai.GenerativeModel('gemini-2.0-flash')
 
-    if interruptions > 1:
-        analysis_summary += " Se detectaron varias interrupciones."
-        personalized_tips.append("Asegúrate de que tu habitación esté oscura, silenciosa y fresca para minimizar las interrupciones.")
-    else:
-        analysis_summary += " El sueño fue continuo."
-        personalized_tips.append("Tu entorno de sueño parece ser efectivo para un descanso sin interrupciones.")
+    prompt = f"""
+    Eres 'NapTelligence', un asistente experto en análisis del sueño. Tu objetivo es analizar los datos de sueño proporcionados en formato JSON y generar un resumen, consejos personalizados y una notificación.
+    Tu respuesta DEBE ser un objeto JSON válido con la siguiente estructura:
+    {{
+      "analysis_summary": "string",
+      "personalized_tips": ["string"],
+      "daily_notification": {{
+        "title": "string",
+        "body": "string"
+      }}
+    }}
+    Analiza la duración total, las interrupciones, y si están disponibles, el ritmo cardíaco (HR) y la variabilidad del ritmo cardíaco (HRV). Proporciona consejos prácticos y accionables. El tono debe ser de apoyo y motivador.
 
-    # Creación de la notificación diaria
-    notification = Notification(
-        title="Tu Resumen de Sueño 😴",
-        body=f"Dormiste {duration // 60}h {duration % 60}m con {interruptions} interrupciones. ¡Revisa tus consejos personalizados!"
-    )
-    
-    return SleepOutput(
-        analysis_summary=analysis_summary,
-        personalized_tips=personalized_tips,
-        daily_notification=notification
-    )
+    Analiza los siguientes datos de sueño: {input_data_str}
+    """
+
+    try:
+        response = model.generate_content(prompt)
+                
+        # Extraer y parsear el contenido JSON de la respuesta
+        # La API de Gemini puede devolver el JSON con saltos de línea y ```json ```, lo limpiamos
+        cleaned_json = response.text.replace("```json", "").replace("```", "").strip()
+        ai_response_json = json.loads(cleaned_json)
+        
+        # Validar la respuesta con el modelo Pydantic
+        return SleepOutput(**ai_response_json)
+
+    except Exception as e:
+        # En caso de error con la API de IA, se lanza una excepción HTTP
+        raise HTTPException(status_code=500, detail=f"Error al procesar con IA: {e}")
+
 
 # --- Endpoints de la API ---
 
@@ -77,12 +102,12 @@ async def read_root() -> Dict[str, str]:
 @app.post("/analyze_sleep", response_model=SleepOutput, tags=["Sleep Analysis"])
 async def analyze_sleep(sleep_data: SleepInput) -> SleepOutput:
     """
-    Recibe los datos del sueño, los analiza y devuelve un resumen y consejos.
+    Recibe los datos del sueño, los analiza con IA y devuelve un resumen y consejos.
     """
     if sleep_data.sleep_summary.total_duration_minutes <= 0:
         raise HTTPException(status_code=400, detail="La duración del sueño debe ser mayor a cero.")
         
-    return analyze_sleep_data(sleep_data)
+    return analyze_sleep_data_with_ai(sleep_data)
 
 @app.get("/health", tags=["General"])
 async def health_check() -> Dict[str, str]:
