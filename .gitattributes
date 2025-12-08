@@ -1,2 +1,2 @@
-assets/* linguist-vendored=false
-demos/* linguist-vendored=false
+assets/** linguist-vendored=false
+demos/** linguist-vendored=false
